@@ -162,15 +162,8 @@ class SubnetAddress(IpAddress):
         for octet in decimal_mask:                        
             if int(octet)==255:
                 octet_number = octet_number+1
-            if int(octet) < 255 and self.__jump == None:
-                #print(f'256 menos el octeto: {octet}')
-                self.__jump = 256 - int(octet)                        
-            if octet_number == 1:
-                self.__new_mask_class = 'A'
-            elif octet_number == 2:
-                self.__new_mask_class = 'B'
-            elif octet_number == 3:
-                self.__new_mask_class = 'C'
+            if int(octet) < 255 and self.__jump == None:                
+                self.__jump = 256 - int(octet)                                    
 
     def __calculate_hosts(self):
         self.__hosts = 2**self.__bits_for_hosts  
