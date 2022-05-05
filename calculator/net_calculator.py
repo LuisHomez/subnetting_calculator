@@ -30,14 +30,11 @@ class IpAddress:
     def __init__(self, ip: str):
         self.TOTAL_BITS = 32
         self.ip = ip
-        #self.prefix = None
         self.prefix = 0
         self.ip_prefix = []
         self.available_bits = ''
         self.__ip_class = None
-        self._identify_class()
-
-        #self.__default_mac_address                
+        self._identify_class()        
 
     def _identify_class(self):
         octets = self.ip.split(sep='.')
@@ -64,11 +61,7 @@ class IpAddress:
 
     @property
     def ip_class(self):
-        return self.__ip_class
-
-    # @property
-    # def prefix(self):
-    #     return self.prefix
+        return self.__ip_class    
 
 class SubnetAddress(IpAddress):
     
@@ -157,8 +150,7 @@ class SubnetAddress(IpAddress):
     def __binary_to_decimal(self):
         binary_addres = self.__new_mask_binary.split('.')
         decimal_addres = []
-        for octet in binary_addres:            
-            #decimal_number = DecimalBinaryConverter.binary_to_decimal(int(octet))
+        for octet in binary_addres:                        
             db = DecimalBinaryConverter()
             decimal_number = db.binary_to_decimal(int(octet))
             decimal_addres.append(str(decimal_number))
@@ -186,9 +178,7 @@ class SubnetAddress(IpAddress):
 
     def hosts_to_ip(self, decimal:int):
         db = DecimalBinaryConverter()
-        binary_jump = db.decimal_to_binary(decimal)
-        # print('el salto en binario',binary_jump)
-        #binary_jump = DecimalBinaryConverter.decimal_to_binary(decimal)        
+        binary_jump = db.decimal_to_binary(decimal)        
         for i in range((self.TOTAL_BITS - self.prefix) - len(binary_jump)):
             binary_jump.insert(0,0)
         counter = 0
@@ -197,27 +187,21 @@ class SubnetAddress(IpAddress):
             if counter > 0 and counter % 8 == 0 and counter != len(binary_jump):
                 binary_hosts+='.'            
             binary_hosts+=str(i)                
-            counter+=1
-        # print('Esto es lo que toca validar la cadena en binario: ', binary_hosts)
-        octets = binary_hosts.split('.')
-        # print('los octetos en binario: ', octets)
+            counter+=1        
+        octets = binary_hosts.split('.')        
         decimal_octets = []
         for o in octets:
             position = 0
-            for i in range(len(o)-1):
-                # print('este es el valor que toma la variable i', i)
+            for i in range(len(o)-1):                
                 if o[i] == '1':
                     position = i
                     break
             if position == 0 and o[0] == 0:
                 o = '0'
             else:
-                o = o[position:]            
-            # print(f'este es el contenido del octeto: {o}')
-            decimal_octet = db.binary_to_decimal(int(o))
-            # print('El resultado de convertir el binario a decimal: ', decimal_octet)          
-            decimal_octets.append(decimal_octet)    
-        # print('octetos en decimal: ', decimal_octets)        
+                o = o[position:]                        
+            decimal_octet = db.binary_to_decimal(int(o))            
+            decimal_octets.append(decimal_octet)            
         return decimal_octets
 
 
