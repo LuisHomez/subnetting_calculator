@@ -31,8 +31,7 @@ class IpAddress:
         self.TOTAL_BITS = 32
         self.ip = ip
         self.prefix = 0
-        self.ip_prefix = []
-        self.available_bits = ''
+        self.ip_prefix = []        
         self.__ip_class = None
         self._identify_class()        
 
@@ -41,23 +40,18 @@ class IpAddress:
         first_octet = int(octets[0])
         if first_octet < 128:
             self.__ip_class = 'A'
-            self.prefix = 8
-            self.available_bits = '000000000000000000000000'                
+            self.prefix = 8            
         elif first_octet < 192:
             self.__ip_class = 'B'
-            self.prefix = 16
-            self.available_bits = '0000000000000000'                
+            self.prefix = 16            
         elif first_octet < 224:
             self.__ip_class = 'C'
-            self.prefix = 24            
-            self.available_bits = '00000000'                
+            self.prefix = 24                        
         else:
             raise ValueError(f'La ip ingresada: {self.__ip} no es valida')
 
         for i in range(int(self.prefix/8)): #number of octets that prefix contains
             self.ip_prefix.append(octets[i])
-
-
 
     @property
     def ip_class(self):
