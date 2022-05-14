@@ -30,3 +30,5 @@ root.tree.heading("Column 4", text="Última ip", anchor=tkinter.CENTER)
 root.tree.heading("Column 5", text="Broadcast", anchor=tkinter.CENTER)
 
 root.mainloop()
+
+
