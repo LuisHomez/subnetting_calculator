@@ -1,4 +1,5 @@
 import math
+from functools import reduce
 
 class DecimalBinaryConverter():
     
@@ -9,7 +10,8 @@ class DecimalBinaryConverter():
         for d in digits:
             if d=='1':
                 decimal+=2**position
-            position-=1                
+            position-=1         
+                       
         return decimal
 
     def decimal_to_binary(self, decimal):
@@ -18,11 +20,9 @@ class DecimalBinaryConverter():
         while (number/2)>=1:
             digits.append(number%2)
             number = math.floor(number/2)
-        digits.append(number)
-    
-        result = []
-        for i in digits[::-1]:
-            result.append(i)
+        digits.append(number)    
+
+        result = [i for i in reversed(digits)]
         return result
 
 class IpAddress:
@@ -31,8 +31,7 @@ class IpAddress:
         self.TOTAL_BITS = 32
         self.ip = ip
         self.prefix = 0
-        self.ip_prefix = []
-        self.available_bits = ''
+        self.ip_prefix = []        
         self.__ip_class = None
         self._identify_class()        
 
@@ -41,23 +40,18 @@ class IpAddress:
         first_octet = int(octets[0])
         if first_octet < 128:
             self.__ip_class = 'A'
-            self.prefix = 8
-            self.available_bits = '000000000000000000000000'                
+            self.prefix = 8            
         elif first_octet < 192:
             self.__ip_class = 'B'
-            self.prefix = 16
-            self.available_bits = '0000000000000000'                
+            self.prefix = 16            
         elif first_octet < 224:
             self.__ip_class = 'C'
-            self.prefix = 24            
-            self.available_bits = '00000000'                
+            self.prefix = 24                        
         else:
             raise ValueError(f'La ip ingresada: {self.__ip} no es valida')
 
-        for i in range(int(self.prefix/8)): #number of octets that prefix contains
+        for i in range(int(self.prefix/8)): #number of active octets that prefix contains
             self.ip_prefix.append(octets[i])
-
-
 
     @property
     def ip_class(self):
@@ -67,8 +61,7 @@ class SubnetAddress(IpAddress):
     
     def __init__(self, ip: str, subnetworks:int ):
         super().__init__(ip)
-        self.__subnetworks = subnetworks
-        self.__new_mac_address = None
+        self.__subnetworks = subnetworks        
         self.__new_prefix = None
         self.__borrowed_bits = None
         self.__bits_for_hosts = None
@@ -121,8 +114,7 @@ class SubnetAddress(IpAddress):
     def util_hosts(self):
         return self.__util_hosts
 
-    def __set_new_prefix(self):
-        print(f'Ejecutando ... ')
+    def __set_new_prefix(self):        
         self.__borrowed_bits = math.ceil(math.log2(self.__subnetworks))
         temp_prefix = self.prefix + self.__borrowed_bits
         if temp_prefix < self.TOTAL_BITS:
