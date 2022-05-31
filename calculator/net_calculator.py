@@ -214,6 +214,16 @@ class SubnetAddress(IpAddress):
         ip_hosts = self.hosts_to_ip((self.__hosts * (subnet_id)) - 1)
         return self.transform_ip_format(self.ip_prefix+ip_hosts)
 
+    def set_subnetworks(self):
+        sub_set = []
+        for i in range(1, self.subnetworks+1):
+            sub_set.append("{} {} {} {} {}".format(i, 
+                                                self.calculate_subnet_ip(i),
+                                                self.calculate_first_ip(i),
+                                                self.calculate_final_ip(i),
+                                                self.calculate_broadcast_ip(i)))
+        return sub_set
+
 
 if __name__=='__main__':
     ip = input('Digite la ip: ')
